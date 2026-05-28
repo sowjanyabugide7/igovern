@@ -58,9 +58,6 @@ The project is built with Spring Boot 3.2 on Java 17, Hibernate/JPA 6.4, Spring 
 java/
 ├── pom.xml                         (parent Maven POM, multi-module)
 ├── docker-compose.yml              (ActiveMQ broker)
-├── env.cmd                         (sets JAVA_HOME to portable JDK 17)
-├── run-data-service.cmd            (launches MS1 with bundled JDK)
-├── run-amq-service.cmd             (launches MS2 with bundled JDK)
 ├── README.md
 ├── PROJECT_DOCUMENTATION.md        (this file)
 │
@@ -459,37 +456,34 @@ These can be scraped by Prometheus and visualised in Grafana with zero code chan
 
 ## 9. Build & Run
 
-### 9.1 Quick run (already built)
+Prerequisites: Java 17+, Maven 3.8+, Node.js 18+ and npm. Docker is optional (used to run ActiveMQ).
 
-```cmd
-docker compose up -d           :: Terminal 0 — ActiveMQ broker
-run-data-service.cmd           :: Terminal 1 — MS1 (port 8081)
-run-amq-service.cmd            :: Terminal 2 — MS2 (port 8082)
-cd frontend && npm start       :: Terminal 3 — Angular UI (port 4200)
+### 9.1 Start ActiveMQ broker (optional)
+
+```bash
+docker compose up -d
+# Web console: http://localhost:8161  (admin/admin)
 ```
 
-Open http://localhost:4200 and log in as `admin` / `admin123`.
+If you skip Docker, set `ACTIVEMQ_URL=vm://localhost?broker.persistent=false` so the AMQ service uses an embedded broker.
 
-### 9.2 Full build from clean checkout
+### 9.2 Build and run the backend
 
-```cmd
-:: One-time: pin the bundled JDK 17 and Maven for the current shell
-call env.cmd
-
-:: Backend
+```bash
 mvn -pl data-service,amq-service -am clean package
 mvn -pl data-service spring-boot:run
-mvn -pl amq-service  spring-boot:run        :: in another shell
+mvn -pl amq-service  spring-boot:run        # in another shell
+```
 
-:: Frontend
+### 9.3 Run the front-end
+
+```bash
 cd frontend
 npm install
 npm start
 ```
 
-### 9.3 Portable tooling
-
-A self‑contained Temurin JDK 17 and Maven 3.9.9 are vendored under `.tools/` so the project runs without modifying the system `PATH` or replacing existing Java installations. The helper scripts (`env.cmd`, `run-data-service.cmd`, `run-amq-service.cmd`) wire `JAVA_HOME` to those tools automatically.
+Open http://localhost:4200 and log in as `admin` / `admin123`.
 
 ---
 

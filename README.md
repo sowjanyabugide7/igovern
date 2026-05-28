@@ -26,20 +26,7 @@ A two-microservice + Angular application built per the iGovern hiring assessment
 - Node.js 18+ and npm
 - Docker (optional – for ActiveMQ broker)
 
-> **Already set up on this machine.** A portable Temurin JDK 17 + Maven 3.9.9 are vendored under `.tools/` and the build artifacts (jars, `node_modules`) are present. You can skip straight to "Just run it".
-
-## Just run it (Windows, no JDK/Maven on PATH required)
-
-```cmd
-docker compose up -d                  :: terminal 0  – ActiveMQ broker
-run-data-service.cmd                  :: terminal 1  – Microservice 1 (port 8081)
-run-amq-service.cmd                   :: terminal 2  – Microservice 2 (port 8082)
-cd frontend && npm start              :: terminal 3  – Angular UI    (port 4200)
-```
-
-Open http://localhost:4200 and log in.
-
-## Full build from clean checkout
+## Build and run
 
 ### 1. Start ActiveMQ broker (optional but recommended)
 
@@ -53,12 +40,9 @@ If you skip Docker, set `ACTIVEMQ_URL=vm://localhost?broker.persistent=false` so
 ### 2. Build & run the backend
 
 ```bash
-:: One-time: pin the bundled JDK 17
-call env.cmd
-
 mvn -pl data-service,amq-service -am clean package
 mvn -pl data-service spring-boot:run
-mvn -pl amq-service  spring-boot:run    :: in another terminal
+mvn -pl amq-service  spring-boot:run    # in another terminal
 ```
 
 ### 3. Run the front-end
