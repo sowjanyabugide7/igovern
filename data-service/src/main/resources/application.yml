@@ -1,0 +1,53 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: data-service
+  datasource:
+    url: jdbc:h2:file:./data/igovern;AUTO_SERVER=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+    open-in-view: false
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+# Microservice 2 endpoint used when a delete is invoked
+amq-service:
+  base-url: http://localhost:8082
+
+# JWT settings (override secret in real envs via env var)
+app:
+  jwt:
+    secret: ${JWT_SECRET:Z2VuZXJhdGUtYS1zdHJvbmctc2VjcmV0LWtleS1mb3ItaWdvdmVybi1hc3Nlc3NtZW50LXBsZWFzZS1jaGFuZ2U=}
+    expiration-ms: 3600000   # 1 hour
+  cors:
+    allowed-origins: http://localhost:4200
+  upload:
+    dir: ./uploads
+    allowed-content-types: application/pdf,image/png,image/jpeg,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized

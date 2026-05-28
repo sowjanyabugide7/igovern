@@ -1,0 +1,28 @@
+server:
+  port: 8082
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: amq-service
+  activemq:
+    # If a real broker is running on localhost:61616, this connects to it.
+    # Otherwise the embedded broker (vm://) kicks in via spring.activemq.broker-url.
+    broker-url: ${ACTIVEMQ_URL:tcp://localhost:61616}
+    user: ${ACTIVEMQ_USER:admin}
+    password: ${ACTIVEMQ_PASSWORD:admin}
+    packages:
+      trust-all: true
+  jms:
+    pub-sub-domain: false   # use queues, not topics
+
+igovern:
+  amq:
+    queue: igovern.delete.events
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus

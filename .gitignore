@@ -1,0 +1,32 @@
+# Maven
+target/
+**/target/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# Logs / data (root-level runtime folders only — do not match Java "data" packages)
+/logs/
+/data/
+/uploads/
+
+# Node / Angular
+node_modules/
+dist/
+.angular/
+.npm/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Tools
+.tools/
+
+# Build artifacts
+*.jar.original
